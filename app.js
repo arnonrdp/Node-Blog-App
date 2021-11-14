@@ -5,6 +5,25 @@ const mongoose = require("mongoose");
 const admin = require("./routes/admin");
 const path = require("path");
 const app = express();
+const session = require("express-session");
+const flash = require("connect-flash");
+
+//Session
+app.use(
+    session({
+        secret: "secret",
+        resave: true,
+        saveUninitialized: true,
+    }),
+);
+app.use(flash());
+
+// Middleware
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash("success_msg");
+    res.locals.error_msg = req.flash("error_msg");
+    next();
+});
 
 // Config
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -18,17 +37,11 @@ mongoose
 
 app.use(express.static(path.join(__dirname, "public")));
 
-// Middleware
-app.use((req, res, next) => {
-    console.log("Request received");
-    next();
-});
-
 // Rotas
 app.use("/admin", admin);
 
 // Outros
 const PORT = 8081;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}/admin/`);
 });

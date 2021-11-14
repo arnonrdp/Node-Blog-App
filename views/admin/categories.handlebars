@@ -3,3 +3,18 @@
 <a href="/admin/categories/add">
     <button class="btn btn-success">Nova categoria</button>
 </a>
+
+{{#each categories}}
+<div class="card mt-4 m-50">
+    <div class="card-body">
+        <h4 class="card-title">{{name}}</h4>
+        <p class="card-text">{{slug}}</p>
+        <small class="card-text d-block mb-3">{{createdAt}}</small>
+        <a href="/admin/categories/edit/{{_id}}" class="btn btn-success">Editar</a>
+        <form action="/admin/categories/delete" method="post">
+            <input type="hidden" name="id" value="{{_id}}">
+            <button type="submit" class="btn btn-danger mt-2">Deletar</button>
+        </form>
+    </div>
+</div>
+{{/each}}
