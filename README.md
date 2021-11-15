@@ -1,14 +1,14 @@
 # Curso de Node.js + Mongoose + MongoDB
 
-1. Run MongoDB:
-```console
-mongosh
+1. [Run MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/#run-mongodb-community-edition):
+```sh
+brew services start mongodb-community  # for Mac
 ```
 
 2. Run Node.js:
-```console
+```sh
 npm install
-nodemon  // or node app.js
+nodemon  # or node app.js
 ```
 
 Curso prático de como trabalhar com o **Node.js** e como desenvolver aplicações web utilizando o framework **Express.js** junto com a biblioteca **Mongoose** que é uma biblioteca **ODM** (quase um ORM para bancos NoSQL) e serve para abstrair toda a conexão do **Node.js** com o **MongoDB**.
