@@ -16,12 +16,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/posts">Posts</a>
                 </li>
+                {{#if user}}
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/login">Login</a>
+                    <a class="nav-link" href="/users/logout">Sair</a>
+                </li>
+                {{else}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/login">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/registro">Registro</a>
+                    <a class="nav-link" href="/users/register">Registro</a>
                 </li>
+                {{/if}}
             </ul>
         </div>
     </div>
