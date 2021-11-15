@@ -10,10 +10,6 @@ router.get("/", (req, res) => {
     res.render("admin/index");
 });
 
-router.get("/posts", (req, res) => {
-    res.send("Admin posts page");
-});
-
 router.get("/categories", (req, res) => {
     Category.find()
         .lean()
@@ -111,7 +107,16 @@ router.post("/categories/delete", (req, res) => {
 });
 
 router.get("/posts", (req, res) => {
-    res.render("admin/posts");
+    Post.find()
+        .populate("category")
+        .sort({ data: "desc" })
+        .then((posts) => {
+            res.render("admin/posts", { posts: posts });
+        })
+        .catch((err) => {
+            req.flash("error_msg", "Error: " + err);
+            res.redirect("/admin");
+        });
 });
 
 router.get("/posts/add", (req, res) => {
@@ -156,6 +161,66 @@ router.post("/posts/new", (req, res) => {
             })
             .catch((err) => req.flash("error_msg", "Error: " + err));
     }
+});
+
+router.get("/posts/edit/:id", (req, res) => {
+    Post.findOne({ _id: req.params.id })
+        .lean()
+        .then((post) => {
+            Category.find()
+                .lean()
+                .then((categories) => {
+                    res.render("admin/editposts", {
+                        post: post,
+                        categories: categories,
+                    });
+                })
+                .catch((err) => {
+                    req.flash("error_msg", "Error: " + err);
+                    res.redirect("/admin/posts");
+                });
+        })
+        .catch((err) => {
+            req.flash("error_msg", "Error: " + err);
+            res.redirect("/admin/posts");
+        });
+});
+
+router.post("/posts/edit", (req, res) => {
+    Post.findOne({ _id: req.body.id })
+        .then((post) => {
+            post.title = req.body.title;
+            post.slug = req.body.slug;
+            post.description = req.body.description;
+            post.content = req.body.content;
+            post.category = req.body.category;
+
+            post.save()
+                .then(() => {
+                    req.flash("success_msg", "Post edited");
+                    res.redirect("/admin/posts");
+                })
+                .catch((err) => {
+                    req.flash("error_msg", "Error: " + err);
+                    res.redirect("/admin/posts");
+                });
+        })
+        .catch((err) => {
+            req.flash("error_msg", "Error: " + err);
+            res.redirect("/admin/posts");
+        });
+});
+
+router.get("/posts/delete/:id", (req, res) => {
+    Post.remove({ _id: req.params.id })
+        .then(() => {
+            req.flash("success_msg", "Post deleted");
+            res.redirect("/admin/posts");
+        })
+        .catch((err) => {
+            req.flash("error_msg", "Error: " + err);
+            res.redirect("/admin/posts");
+        });
 });
 
 module.exports = router;

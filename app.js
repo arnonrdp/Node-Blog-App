@@ -1,5 +1,8 @@
 const express = require("express");
-const handlebars = require("express-handlebars");
+// const handlebars = require("express-handlebars");
+const Handlebars = require("handlebars");
+const { allowInsecurePrototypeAccess } = require("@handlebars/allow-prototype-access");
+const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const admin = require("./routes/admin");
@@ -28,8 +31,17 @@ app.use((req, res, next) => {
 // Config
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.engine("handlebars", handlebars({ defaultLayout: "main" }));
+// app.engine("handlebars", handlebars({ defaultLayout: "main" }));
+// app.set("view engine", "handlebars");
+const hbs = exphbs.create({
+    defaultLayout: "main",
+    extname: "handlebars",
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
+});
+
+app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
+app.set("views", "views");
 mongoose
     .connect("mongodb://localhost/blogapp")
     .then(() => console.log("Connected to MongoDB"))
