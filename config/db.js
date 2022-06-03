@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV == "production") {
-    module.exports = { mongURI: "mongodb://mongo:3YaLw2WEsFG0voaiHox3@containers-us-west-60.railway.app:8044" };
+    module.exports = { mongURI: "mongodb+srv://arnon_blogapp:IOZ0r35Qh4GeQk5C@node-blog-app.wkpxm.mongodb.net/?retryWrites=true&w=majority" };
 } else {
     module.exports = { mongURI: "mongodb://localhost/blogapp" };
 }
